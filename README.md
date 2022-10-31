@@ -1,4 +1,4 @@
 # aerolineaMaria
 
 <h1 align="center"> DaviniAir </h1>
-![](img/image.png)
+<img src="./img/image.png">
