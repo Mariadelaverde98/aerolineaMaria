@@ -1,0 +1,91 @@
+* {
+    padding: 0;
+    margin: 0;
+}
+
+div.modal-body {
+    display: flex;
+    flex-direction: column;
+}
+
+div.modal-body input {
+    margin: 1%;
+}
+
+div#registrate {
+    display: flex;
+    justify-content: space-around;
+}
+
+body {
+    background-color: #2e2e5c;
+}
+
+.pasajeros {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 25px;
+}
+
+#continuar {
+    font-family: system-ui;
+    font-size: large;
+    color: #2e2e5c;
+    font-weight: 500;
+    padding: 7px;
+    background-color: aliceblue;
+    border: 0.5px solid white;
+    box-shadow: 1px 1px 6px black;
+}
+
+#continuar:hover {
+    background-color: #4e4e79;
+    color: aliceblue;
+}
+
+#precioTotal {
+    font-family: system-ui;
+    font-size: large;
+    color: white;
+    font-weight: 500;
+}
+
+#precioBoton {
+    display: flex;
+    justify-content: space-around;
+    padding: 1%;
+    background-color: #0000004f;
+    align-items: center;
+    position: relative;
+    bottom: 0;
+}
+
+.div1 {
+    display: grid;
+    grid-template-columns: 180px 400px;
+    grid-template-rows: 250px;
+    margin: 0.6%;
+}
+
+.div2 {
+    background-color: white;
+    box-shadow: 1px 1px 6px;
+    padding: 15%;
+}
+
+div.pasajero {
+    background-color: white;
+    box-shadow: 1px 1px 6px;
+    padding: 6%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: stretch;
+}
+
+p.numPas {
+    font-family: system-ui;
+    font-weight: 500;
+    color: rgb(46, 46, 92);
+}

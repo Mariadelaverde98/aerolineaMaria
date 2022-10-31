@@ -1,0 +1,13 @@
+div.modal-body {
+    display: flex;
+    flex-direction: column;
+}
+
+div.modal-body input {
+    margin: 1%;
+}
+
+div#registrate {
+    display: flex;
+    justify-content: space-around;
+}
