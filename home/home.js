@@ -53,6 +53,9 @@ function buscarVuelos() {
     var destinoBusq = document.getElementsByTagName('select')[0].value;
     var numPasajerosBusq = document.getElementById('pasajeros').value;
     var fechaBusq = document.getElementById('fecha').value;
+    if (fechaBusq[fechaBusq.length - 2] == '0') {
+        fechaBusq = fechaBusq.substring(0, fechaBusq.length - 2) + fechaBusq[fechaBusq.length - 1];
+    }
     var vuelosEncontrados = vuelos.filter(vuelo => vuelo.destino == destinoBusq && vuelo.fecha == fechaBusq && numPasajerosBusq <= vuelo.asientosLibres);
     pintarVuelos(vuelosEncontrados);
 }
@@ -75,7 +78,6 @@ function pintarVuelos(vuelosEncontrados) {
         p.style.fontFamily = 'system-ui';
         p.style.fontWeight = '500';
         p.style.color = '#2E2E5C';
-
 
         var botonCompraVuelo = document.createElement("button");
         div1.appendChild(botonCompraVuelo);
@@ -108,15 +110,16 @@ function pintarVuelos(vuelosEncontrados) {
 } */
 
 function comprar(id) {
+    alert(id);
     var numBilletes = parseInt(document.getElementById("pasajeros").value);
     var vuelos = JSON.parse(localStorage.getItem("vuelos"));
     var sesion = JSON.parse(localStorage.getItem("sesion"));
-    var vueloSeleccionado = vuelos[id + 1];
+    var vueloSeleccionado = vuelos[id - 1];
     if (sesion.estado == "open") {
         var vuelo = new Vuelo();
         vuelo = vuelo.fromJsonToVuelo(vueloSeleccionado);
         vuelo.vendeBilletes(numBilletes);
-        vuelos[id + 1] = vuelo;
+        vuelos[id - 1] = vuelo;
         localStorage.setItem('vuelos', JSON.stringify(vuelos));
         //creo una reserva con los datos 
         var reserva = new Reserva(vuelo, numBilletes, numBilletes * parseFloat(vuelo.precio));
@@ -127,7 +130,7 @@ function comprar(id) {
     }
 }
 
-(function() {
+(function () {
     var hoy = new Date(Date.now());
     document.getElementById('fecha').setAttribute("min", `${hoy.getFullYear()}-${hoy.getMonth() + 1}-${hoy.getDate()}`);
 })();

@@ -9,6 +9,10 @@ class Vuelo {
         this.horallegada = horallegada;
         this.asientosLibres = asientosLibres;
         this.precio = precio;
+        this.asientos = [[0, 0, 0, 0, 0, 0, 0, 0],
+                        [0, 0, 0, 0, 0, 0, 0],
+                        [0, 0, 0, 0, 0, 0, 0],
+                        [0, 0, 0, 0, 0, 0, 0, 0]];
     }
 
     fromJsonToVuelo(json) {

@@ -40,3 +40,14 @@ function actualizaHistorialYpoints(reserva) {
     var precioTotal = JSON.parse(localStorage.getItem('reservaActual')).precio;
     document.getElementById('precioTotal').appendChild(document.createTextNode('TOTAL: ' + precioTotal + '€'));
 })();
+
+(function rellenarPago() {
+    var sesion = new Sesion();
+    sesion = sesion.getSesion();
+    if (sesion.usuario.metodoPago) {
+        document.getElementById('cardholder').value = sesion.usuario.metodoPago.titular;
+        document.getElementById('cardnumber').value = sesion.usuario.metodoPago.numeroTarjeta;
+        document.getElementById('date').value = sesion.usuario.metodoPago.fechaExpedicion;
+        document.getElementById('cvv').value = sesion.usuario.metodoPago.cvv;
+    }
+})();

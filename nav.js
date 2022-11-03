@@ -146,12 +146,6 @@ function modal2(div) {
     divCont2.appendChild(divInputs);
     divInputs.setAttribute("class", "modal-body");
 
-    var email = document.createElement("input");
-    divInputs.appendChild(email);
-    email.setAttribute("type", "email");
-    email.setAttribute("placeholder", "Email");
-    email.setAttribute("id", "emailRegis");
-
     var nombre = document.createElement("input");
     divInputs.appendChild(nombre);
     nombre.setAttribute("type", "text");
@@ -164,17 +158,50 @@ function modal2(div) {
     apellidos.setAttribute("placeholder", "Apellidos");
     apellidos.setAttribute("id", "apellidosRegis");
 
+    var fechaNacimiento = document.createElement("input");
+    divInputs.appendChild(fechaNacimiento);
+    fechaNacimiento.setAttribute("type", "date");
+    fechaNacimiento.setAttribute("placeholder", "fecha de nacimiento");
+    fechaNacimiento.setAttribute("id", "fechaRegis");
+    var hoy = new Date(Date.now());
+    fechaNacimiento.setAttribute("max", `${hoy.getFullYear()}-${hoy.getMonth() + 1}-${hoy.getDate()}`);
+
+
+    var tfn = document.createElement("input");
+    divInputs.appendChild(tfn);
+    tfn.setAttribute("type", "text");
+    tfn.setAttribute("placeholder", "Teléfono");
+    tfn.setAttribute("id", "tfnRegis");
+
     var dni = document.createElement("input");
     divInputs.appendChild(dni);
     dni.setAttribute("type", "text");
     dni.setAttribute("placeholder", "DNI");
     dni.setAttribute("id", "dniRegis");
 
+    var email = document.createElement("input");
+    divInputs.appendChild(email);
+    email.setAttribute("type", "email");
+    email.setAttribute("placeholder", "Email");
+    email.setAttribute("id", "emailRegis");
+
+    var confirEmail = document.createElement("input");
+    divInputs.appendChild(confirEmail);
+    confirEmail.setAttribute("type", "email");
+    confirEmail.setAttribute("placeholder", "Confirmar email");
+    confirEmail.setAttribute("id", "confirEmailRegis");
+
     var password = document.createElement("input");
     divInputs.appendChild(password);
     password.setAttribute("type", "password");
     password.setAttribute("placeholder", "Contraseña");
     password.setAttribute("id", "passRegis");
+
+    var confirPassword = document.createElement("input");
+    divInputs.appendChild(confirPassword);
+    confirPassword.setAttribute("type", "password");
+    confirPassword.setAttribute("placeholder", "Confirmar contraseña");
+    confirPassword.setAttribute("id", "confirPassRegis");
 
     var regisButton = document.createElement("button");
     divInputs.appendChild(regisButton);
@@ -189,7 +216,7 @@ window.onload = () => {
     var nav = document.getElementsByTagName('nav')[0];
     nav.style.width = '100%';
     nav.style.height = '60px';
-    nav.style.backgroundColor = 'rgba(255, 255, 255, 0.55)';
+    nav.style.backgroundColor = 'white';
     nav.style.display = 'flex';
     nav.style.justifyContent = 'space-between';
     nav.style.alignItems = 'center';
@@ -235,23 +262,25 @@ function dropDownMenu(nav, sesion) {
     dropDownMenu.setAttribute("class", "dropdown-menu");
 
     var perfil = document.createElement('a');
-    perfil.setAttribute("href", "../perfil/perfil.html");
+    perfil.setAttribute("href", "#");
     perfil.setAttribute("class", "dropdown-item");
     perfil.innerHTML = "Perfil";
     dropDownMenu.appendChild(perfil);
+    perfil.setAttribute("onclick", "toPerfil()");
 
     var checkin = document.createElement('a');
-    checkin.setAttribute("href", "../perfil/perfil.html");
+    checkin.setAttribute("href", "#");
     checkin.setAttribute("class", "dropdown-item");
     checkin.innerHTML = "Check-In";
     dropDownMenu.appendChild(checkin);
+    checkin.setAttribute("onclick", "toCheckin()");
 
     var cerrarSesion = document.createElement('a');
     cerrarSesion.setAttribute("href", "#");
     cerrarSesion.setAttribute("class", "dropdown-item");
     cerrarSesion.innerHTML = "Cerrar sesion";
     dropDownMenu.appendChild(cerrarSesion);
-    cerrarSesion.setAttribute("onclick", "cerrarSesion()")
+    cerrarSesion.setAttribute("onclick", "cerrarSesion()");
 
     dropDownDiv.appendChild(dropDownButton);
     dropDownDiv.appendChild(dropDownMenu);
@@ -260,17 +289,22 @@ function dropDownMenu(nav, sesion) {
 
 /*-------------------------FUNCIONALIDADES---------------------*/
 
+function toPerfil() {
+    localStorage.setItem("pos", "0");
+    window.location = "../perfil/perfil.html";
+}
+
+function toCheckin() {
+    localStorage.setItem("pos", "1");
+    window.location = "../perfil/perfil.html";
+}
+
 function iniciarSesion() {
     var email = document.getElementById("emailIniSes").value;
     var password = document.getElementById("passIniSes").value;
-
     var usuarios = new Usuarios();
     usuarios.usuariosFromLocalStorage();
-    console.log(usuarios);
-    console.log(email);
     var usuario = usuarios.datos[email];
-    console.log(usuario);
-    console.log(usuario.contrasenia);
     if (usuario && usuario.contrasenia == password) {
         var sesion = new Sesion("open", usuario);
         sesion.guardarSesion();
@@ -287,16 +321,69 @@ function registrarse() {
     var apellidos = document.getElementById("apellidosRegis").value;
     var email = document.getElementById("emailRegis").value;
     var password = document.getElementById("passRegis").value;
+    var confirEmail = document.getElementById("confirEmailRegis").value;
+    var confirPassword = document.getElementById("confirPassRegis").value;
     var dni = document.getElementById("dniRegis").value;
-    var usuario = new Usuario(nombre, apellidos, email, password, "", dni, "");
-    if (usuarios.addUsuario(usuario)) {
-        usuarios.guardarEnLocalStorage();
-        var sesion = new Sesion("open", usuario);
-        sesion.guardarSesion();
-        window.location = "../home/home.html"
+    var fechaNacimiento = document.getElementById("fechaRegis").value;
+    var telefono = document.getElementById("tfnRegis").value;
+
+    var respConfir = comprobar(nombre, apellidos, email, confirEmail, password, confirPassword, dni, telefono);
+    var usuario = new Usuario(nombre, apellidos, email, password, fechaNacimiento, dni, telefono, fechaNacimiento);
+    if (respConfir[0]) {
+        if (usuarios.addUsuario(usuario)) {
+            usuarios.guardarEnLocalStorage();
+            var sesion = new Sesion("open", usuario);
+            sesion.guardarSesion();
+            window.location = "../home/home.html"
+        } else {
+            alert("Ya hay una cuenta asociada a este email o DNI");
+        }
     } else {
-        alert("Ya hay una cuenta asociada a este email o DNI");
+        alert(respConfir[1]);
     }
+}
+
+function comprobar(nombre, apellidos, email, confirEmail, password, confirPassword, dni, telefono, fechaNacimiento) {
+    var correcto = true;
+    var mensaje;
+    var re = {
+        nombre: new RegExp(/^[A-Z\u00C0-\u017F]?[a-z\u00C0-\u017F]+\s?[A-Z\u00C0-\u017F]?[a-z\u00C0-\u017F]*$/),
+        apellidos: new RegExp(/^[A-Z\u00C0-\u017F]?[a-z\u00C0-\u017F]+ \s?[A-Z\u00C0-\u017F]?[a-z\u00C0-\u017F]* \s?[A-Z\u00C0-\u017F]?[a-z\u00C0-\u017F]* \s?[A-Z\u00C0-\u017F]?[a-z\u00C0-\u017F]*$/),
+        dni: new RegExp(/^[0-9]{8}[A-Z]$/i),
+        telefono: new RegExp(/^[0-9]{9}$/),
+        email: new RegExp(/^[^@]+@[^@]+\.[a-zA-Z]{2,}$/),
+        password: new RegExp(/^(?=\w*\d)(?=\w*[A-Z])(?=\w*[a-z])\S{8,16}$/)
+    }
+    var campos = Object.keys(re);
+    var inputs = [nombre, apellidos, dni, telefono, email, password]
+    var i = 0;
+    while(correcto && i < campos.length) {
+        var correcto = re[campos[i]].test(inputs[i]);
+        if(!correcto) {
+            mensaje = "El campo " + campos[i] + " no es correcto."
+            if(campos[i] == "password") {
+                mensaje += "\n La contraseña debe tener al entre 8 y 16 caracteres, \n al menos un dígito, al menos una minúscula \n y al menos una mayúscula. \n NO puede tener otros símbolos"
+            }
+        }
+        i++;
+    }
+
+    if(correcto && fechaNacimiento == '') {
+        mensaje = "El campo fecha es obligatorio";
+        correcto = false;
+    }
+
+    if(correcto && email != confirEmail) {
+        mensaje = "La confirmacion del email no es correcta";
+        correcto = false;
+    }
+
+    if(correcto && password != confirPassword) {
+        mensaje = "La confirmacion de la contraseña no es correcta";
+        correcto = false;
+    }
+
+    return[correcto, mensaje];
 }
 
 function cerrarSesion() {

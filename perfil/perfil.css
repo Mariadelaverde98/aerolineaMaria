@@ -1,6 +1,7 @@
 * {
-    padding: 0;
-    margin: 0;
+  padding: 0;
+  margin: 0;
+  color: #2E2E5C
 }
 
 div.modal-body {
@@ -19,91 +20,93 @@ div#registrate {
 
 /* Style the tab */
 .tab {
-    float: left;
-    border: 1px solid #ccc;
-    background-color: #f1f1f1;
-    width: 30%;
-  }
-  
-  /* Style the buttons inside the tab */
-  .tab button {
-    display: block;
-    background-color: inherit;
-    color: black;
-    padding: 22px 16px;
-    width: 100%;
-    border: none;
-    outline: none;
-    text-align: left;
-    cursor: pointer;
-    transition: 0.3s;
-    font-size: 17px;
-  }
-  
-  /* Change background color of buttons on hover */
-  .tab button:hover {
-    background-color: #ddd;
-  }
-  
-  /* Create an active/current "tab button" class */
-  .tab button.active {
-    background-color: #ccc;
-  }
-  
-  /* Style the tab content */
-  .tabcontent {
-    float: left;
-    padding: 0px 12px;
-    border: 1px solid #ccc;
-    width: 70%;
-    border-left: none;
-    background-color: white;
-    padding: 30px;
-  }
-
- input {
-    width: 200px;
-    height: 30px;
-    font-size: large;
-    padding-left: 5px;
+  float: left;
+  border: 1px solid #ccc;
+  background-color: #f1f1f1;
+  width: 30%;
 }
+
+/* Style the buttons inside the tab */
+.tab button {
+  display: block;
+  background-color: inherit;
+  color: black;
+  padding: 22px 16px;
+  width: 100%;
+  border: none;
+  outline: none;
+  text-align: left;
+  cursor: pointer;
+  transition: 0.3s;
+  font-size: 17px;
+}
+
+/* Change background color of buttons on hover */
+.tab button:hover {
+  background-color: #ddd;
+}
+
+/* Create an active/current "tab button" class */
+.tab button.active {
+  background-color: #ccc;
+}
+
+/* Style the tab content */
+.tabcontent {
+  float: left;
+  padding: 0px 12px;
+  border: 1px solid #ccc;
+  width: 70%;
+  border-left: none;
+  background-color: white;
+  padding: 30px;
+}
+
+input {
+  width: 70%;
+  height: 30px;
+  font-size: large;
+  padding-left: 5px;
+}
+
 input[type=date] {
-    width: 150px;
-    height: 30px;
-    font-size: large;
-    padding-left: 5px;
+  width: 70%;
+  height: 30px;
+  font-size: large;
+  padding-left: 5px;
 }
 
-label{
-    font-size: large;
-    padding-left: 5px;
+label {
+  font-size: large;
+  padding-left: 5px;
+  margin-top: 0.5rem;
 }
 
-button{
-    width: 24%;
-    font-family: system-ui;
-    font-size: large;
-    color: white;
-    font-weight: 500;
-    background-color: #2e2e5c;
-    border: 0.5px solid white;
+button {
+  width: 24%;
+  font-family: system-ui;
+  font-size: large;
+  color: white;
+  font-weight: 500;
+  background-color: #2e2e5c;
+  border: 0.5px solid white;
 
 }
 
 button:hover {
-    background-color: #4e4e79;
-    color: white;
+  background-color: #4e4e79;
+  color: white;
 }
 
 select#extension {
-    width: 6%;
-    height: 29px;
-    font-size: large;
-    padding-left: 5px;
+  width: 6%;
+  height: 29px;
+  font-size: large;
+  padding-left: 5px;
 }
 
 h5 {
-    margin-top:30px
+  margin-top: 30px
 }
 
 /* REGISTRO---- */
@@ -123,6 +126,77 @@ div.registro {
 }
 
 div.registro div {
-  margin-top:5px;
+  margin-top: 5px;
 
+}
+
+div#pago div#addPago {
+  flex-direction: column;
+}
+
+div#metodoPago {
+  display: flex;
+  flex-direction: column;
+  border: 0.5px solid;
+  border-radius: 5px;
+  padding: 3%;
+  box-shadow: 0px 0px 2px 0px;
+  background-color: #6161a32b;
+  font-weight: 600;
+  font-size: larger;
+  color: #2E2E5C;
+}
+
+div.vuelosCheckin {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+  border: 0.5px solid;
+  border-radius: 5px;
+  padding: 3%;
+  box-shadow: 0px 0px 2px 0px;
+  font-size: x-large;
+  background-color: #6161a32b;
+}
+
+div#info-personal-container div, div#info-contacto-container div, div#cambio_password_container div {
+  display: flex;
+  flex-direction: column;
+}
+
+div#info-contacto-container, div#cambio_password_container, div#info-personal-container{
+  border: 0.5px solid;
+  border-radius: 5px;
+  padding: 3%;
+  box-shadow: 0px 0px 2px 0px;
+  background-color: #6161a32b;
+  padding-top: 1.5%;
+  font-weight: 500;
+  color: #2E2E5C;
+}
+
+div#idicion_perfil_container, div#boton_cambia_pass {
+  margin: 2%;
+  display: flex;
+  justify-content: space-around;
+}
+
+div#idicion_perfil_container button, div#boton_cambia_pass button {
+  border-radius: 5px;
+  padding-top: 1%;
+  padding-bottom: 1%;
+}
+
+.tab button {
+  background-color: #6161a32b;
+  color: #2E2E5C;
+}
+
+.tab button.active {
+  background-color: #6161a371;
+}
+
+.tab button:hover {
+  background-color: rgb(255, 255, 255);
 }

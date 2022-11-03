@@ -5,5 +5,6 @@ class Reserva {
         this.precio = precio;
         this.pasajeros; //Array de JSONs con los datos de los pasajeros
         this.metodoPago; //JSON con los datos de pago
+        this.checkin = false;
     }
 }

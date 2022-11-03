@@ -19,6 +19,7 @@ class Usuario {
         this.telefono = telefono;
         this.points = 0;
         this.historialReservas = [];
+        this.metodoPago;
     }
 
     cambiaContrasenia(contrasenia, nuevaContrasenia) {
