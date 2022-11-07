@@ -146,7 +146,7 @@ function openContent(evt, id) {
         anioVuelo = parseInt(fechaVuelo.substring(0, 4));
         mesVuelo = Math.abs(parseInt(fechaVuelo.substring(5, 7)));
         diaVuelo = Math.abs(parseInt(fechaVuelo.substring(fechaVuelo.length - 2)));
-        horas = parseInt(reserva.vuelo.hora.substring(0,2));
+        horas = parseInt(reserva.vuelo.hora.substring(0, 2));
         mins = parseInt(reserva.vuelo.hora.substring(3));
         fechaVuelo = new Date(anioVuelo, mesVuelo - 1, diaVuelo, horas, mins, 0);
         return calcularDiferenciaHoras(hoy, fechaVuelo) < 48 && !reserva.checkin;
@@ -248,21 +248,54 @@ metodoPago();
 
 /*Se guarda el metodo de pago en el usuario*/
 function guardarPago() {
-    var sesion = new Sesion();
-    sesion = sesion.getSesion();
-    var usuario = sesion.usuario;
-    usuario.metodoPago = {
-        titular: document.getElementById("cardholder").value,
-        numeroTarjeta: document.getElementById("cardnumber").value,
-        fechaExpedicion: document.getElementById("date").value,
-        cvv: document.getElementById("cvv").value
+    var titular = document.getElementById("cardholder").value;
+    var numeroTarjeta = document.getElementById("cardnumber").value;
+    var fechaExpedicion = document.getElementById("date").value;
+    var cvv = document.getElementById("cvv").value;
+    var comprobacion = compruebaDatos(titular, numeroTarjeta, fechaExpedicion, cvv);
+    if (comprobacion[0]) {
+        var sesion = new Sesion();
+        sesion = sesion.getSesion();
+        var usuario = sesion.usuario;
+        usuario.metodoPago = {
+            "titular": titular,
+            "numeroTarjeta": numeroTarjeta,
+            "fechaExpedicion": fechaExpedicion,
+            "cvv": cvv
+        }
+        sesion.guardarSesion();
+        var usuarios = new Usuarios();
+        usuarios = usuarios.usuariosFromLocalStorage();
+        usuarios.datos[usuario.email] = usuario;
+        usuarios.guardarEnLocalStorage();
+        metodoPago();
+    } else {
+        alert(comprobacion[1]);
     }
-    sesion.guardarSesion();
-    var usuarios = new Usuarios();
-    usuarios = usuarios.usuariosFromLocalStorage();
-    usuarios.datos[usuario.email] = usuario;
-    usuarios.guardarEnLocalStorage();
-    metodoPago();
+}
+
+/*Comprueba que los datos sean correctos*/
+function compruebaDatos(nombre, numTarjeta, fechaEx, cvv) {
+    var correcto = true;
+    var mensaje;
+    var re = {
+        "nombre": new RegExp(/^[A-Z\u00C0-\u017F]?[a-z\u00C0-\u017F]+\s?[A-Z\u00C0-\u017F]?[a-z\u00C0-\u017F]*$/),
+        "numero de tarjeta": new RegExp(/^[0-9]{16}$/),
+        //"numero de tarjeta": new RegExp(/^(?:4\d([\- ])?\d{6}\1\d{5}|(?:4\d{3}|5[1-5]\d{2}|6011)([\- ])?\d{4}\2\d{4}\2\d{4})$/),
+        "cvv": new RegExp(/^[0-9]{3}$/),
+        "fecha expedicion": new RegExp(/^[0-1]{1}[0-9]{1}\/[0-9]{1}[0-9]{1}$/)
+    }
+    var campos = Object.keys(re);
+    var inputs = [nombre, numTarjeta, cvv, fechaEx];
+    var i = 0;
+    while (correcto && i < campos.length) {
+        var correcto = re[campos[i]].test(inputs[i]);
+        if (!correcto) {
+            mensaje = "El campo " + campos[i] + " no es correcto."
+        }
+        i++;
+    }
+    return [correcto, mensaje];
 }
 
 /*Pinta la tarjeta con los datos del metodo de pago*/
@@ -294,7 +327,7 @@ function borrarMetodoPago() {
     sesion = sesion.getSesion();
     sesion.usuario.metodoPago = undefined;
     sesion.guardarSesion();
-    
+
     var usuarios = new Usuarios();
     usuarios = usuarios.usuariosFromLocalStorage();
     usuarios.datos[sesion.usuario.email] = sesion.usuario;

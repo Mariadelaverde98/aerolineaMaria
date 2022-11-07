@@ -1,4 +1,4 @@
-//creamos con el constructor una nueva clase vuelo con los siguientes datos:
+//Clase vuelo para almacenar todos los datos de los vuelos
 class Vuelo {
     constructor(id, origen, destino, fecha, hora, horallegada, asientosLibres, precio) {
         this.id = id;
@@ -23,17 +23,3 @@ class Vuelo {
         this.asientosLibres -= numBilletes;
     }
 }
-/* 
-class Vuelos {
-    constructor(vuelos) {
-        this.datos = this.datos; //debe ser un array con objetos de la clase Vuelo.
-    }
-
-    buscaVuelos(destino, fecha, numPasajeros) {
-        return this.datos.filter(vuelo => vuelo.destino == destino && vuelo.fecha == fecha && numPasajeros <= vuelo.asientosLibres);
-    }
-
-    fromJsonToVuelos(json) {
-        return Object.assign(this, json);
-    }
-} */

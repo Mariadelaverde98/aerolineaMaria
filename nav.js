@@ -1,3 +1,4 @@
+//Muestra el modal de inicio de sesion
 function modal(nav) {
     var div = document.createElement("div");
     nav.appendChild(div);
@@ -100,6 +101,7 @@ function modal(nav) {
     modal2(div, enlaceRegis);
 }
 
+//Muestra el modal de registro
 function modal2(div) {
     //cuerpo modal
     var divModal = document.createElement("div");
@@ -212,6 +214,7 @@ function modal2(div) {
     regisButton.setAttribute("onclick", "registrarse();");
 }
 
+//Al cargar la pagina crea el nav
 window.onload = () => {
     var nav = document.getElementsByTagName('nav')[0];
     nav.style.width = '100%';
@@ -239,6 +242,7 @@ window.onload = () => {
 
 }
 
+//Si esta la sesion iniciada se despliega un menu al pinchar la parte izquiera del nav
 function dropDownMenu(nav, sesion) {
     //div dropdown
     var dropDownDiv = document.createElement("div");
@@ -289,16 +293,19 @@ function dropDownMenu(nav, sesion) {
 
 /*-------------------------FUNCIONALIDADES---------------------*/
 
+//nos lleva al perfil
 function toPerfil() {
     localStorage.setItem("pos", "0");
     window.location = "../perfil/perfil.html";
 }
 
+//nos lleva al perfil en la seccion de checkin
 function toCheckin() {
     localStorage.setItem("pos", "1");
     window.location = "../perfil/perfil.html";
 }
 
+//funcion para iniciar sesion si los datos son correctos
 function iniciarSesion() {
     var email = document.getElementById("emailIniSes").value;
     var password = document.getElementById("passIniSes").value;
@@ -314,6 +321,7 @@ function iniciarSesion() {
     }
 }
 
+//funcion para registrar un usuario
 function registrarse() {
     var usuarios = new Usuarios();
     usuarios.usuariosFromLocalStorage();
@@ -345,6 +353,7 @@ function registrarse() {
     }
 }
 
+//comprueba que los datos de registro sean correctos
 function comprobar(nombre, apellidos, email, confirEmail, password, confirPassword, dni, telefono, fechaNacimiento) {
     var correcto = true;
     var mensaje;
@@ -388,6 +397,8 @@ function comprobar(nombre, apellidos, email, confirEmail, password, confirPasswo
     return[correcto, mensaje];
 }
 
+
+//funcion que cierra la sesion
 function cerrarSesion() {
     var sesion1 = new Sesion();
     sesion1 = sesion1.getSesion();

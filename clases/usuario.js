@@ -51,12 +51,6 @@ class Usuarios {
         }
         return aniadido;
     }
-
-    /*Elimina un usuario de nuestra "base de datos"*/
-    darDeBajaUsuraio(usuario) {
-
-    }
-
     /* comprueba si existe un usuario con el dni pasado como parametro */
     existeDni(dni) {
         var existe = false;

@@ -1,3 +1,4 @@
+//Clase reserva que permite almacenar todos los datos de las reservas que hace un usuario
 class Reserva {
     constructor(id, vuelo, numBilletes, precio) {
         this.id = id;
@@ -11,3 +12,4 @@ class Reserva {
         this.facturaEquipaje = false;
     }
 }
+

@@ -1,3 +1,4 @@
+/*Crea un div por cada pasajero que hay en la reserva*/
 (function divsPasajeros() {
     var reserva = JSON.parse(localStorage.getItem('reservaActual'));
     var numPasajeros = reserva.numBilletes;
@@ -9,6 +10,7 @@
     pintaPrecioTotal();
 })();
 
+/*Se autocompletan los datos del usuario que tiene la sesion iniciada */
 function autoRellenaDatos() {
     var usuario = JSON.parse(localStorage.getItem("sesion")).usuario;
     var divDatos = document.getElementById("pasajero0");
@@ -18,6 +20,7 @@ function autoRellenaDatos() {
     inputs[2].value = usuario.dni;
 }
 
+/*Crea los divs con los formularios que recogen los datos de los pasajeros */
 function creaDiv(i) {
     var div1 = document.createElement('div');
     var div2 = document.createElement('div');
@@ -64,12 +67,13 @@ function creaDiv(i) {
     div3.setAttribute('class', 'pasajero');
 }
 
-
+/*Pinta el precio total de la reserva */
 function pintaPrecioTotal() {
     var reserva = JSON.parse(localStorage.getItem('reservaActual'));
     document.getElementById('precioTotal').appendChild(document.createTextNode('TOTAL: ' + reserva.precio + '€'));
 }
 
+/*Guarda los datos de los pasajeros en casa de ser correctos y pasa a la pagina de pago*/
 function continuarApago() {
     let datosPasajeros = document.getElementsByClassName('pasajero');
     let pasajeros = [];
@@ -101,6 +105,7 @@ function continuarApago() {
     }
 }
 
+/*Permite volver atras */
 function atras() {
     window.location = '../home/home.html';
 }

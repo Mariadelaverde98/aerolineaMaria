@@ -1,4 +1,6 @@
-//hacemos un array con 180 vuelos en total (6 vuelos diarios por 30 días)
+
+/*Script que inicializa nuestra "base de datos" */
+
 var arrayVuelo = [];
 var idActual = 0;
 

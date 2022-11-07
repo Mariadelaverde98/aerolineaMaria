@@ -61,7 +61,22 @@ mas asientos de los billetes que se han reservado*/
             }
         }
     })
-})()
+})();
+
+(function asientosDeMas() {
+    var b8 = document.getElementById("8B");
+    var c8 = document.getElementById("8C");
+    b8.onclick = "";
+    c8.onclick = "";
+    b8.style.backgroundColor = "aliceblue";
+    b8.style.borderColor = "aliceblue";
+    b8.style.color = "aliceblue";
+    b8.style.borderStyle = "dotted";
+    c8.style.backgroundColor = "aliceblue";
+    c8.style.borderColor = "aliceblue";
+    c8.style.color = "aliceblue";
+    c8.style.borderStyle = "dotted";
+})();
 
 /*pinta en azul el asiento seleccionado*/
 function seleccionaAsiento(id) {

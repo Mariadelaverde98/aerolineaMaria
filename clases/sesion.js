@@ -1,3 +1,4 @@
+//clase sesion que permite conocer si hay una sesion iniciada y que usuario esta en la sesion
 class Sesion {
     constructor(estado, usuario) {
         this.estado = estado;

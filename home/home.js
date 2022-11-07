@@ -1,3 +1,6 @@
+
+/*Funcion que al realizar una busqueda muetsra un resumen en la parte superior de la pantalla
+con los datos de la busqueda realizada y que incluye un boton para editar la busqueda*/
 function encogerBusqueda() {
     var destino = document.getElementsByTagName('select')[0].value;
     var numPasajeros = document.getElementById('pasajeros').value;
@@ -42,6 +45,7 @@ function encogerBusqueda() {
 
 }
 
+/*Esconde el resumen de la busqueda y vuelve a mostrar el panel de busqueda inicial */
 function editarBusqueda() {
     document.getElementsByClassName('busqueda')[0].style.display = 'flex';
     document.getElementsByClassName('busqueda')[1].style.display = 'none';
@@ -49,6 +53,8 @@ function editarBusqueda() {
     vuelos.parentNode.removeChild(vuelos);
 }
 
+/*Funcion que busca los vuelos existentes en el localStorage en base a los campos
+fecha destino y numero de pasajeros */
 function buscarVuelos() {
     var vuelos = JSON.parse(localStorage.getItem("vuelos"));
     var destinoBusq = document.getElementsByTagName('select')[0].value;
@@ -64,6 +70,7 @@ function buscarVuelos() {
     pintarVuelos(vuelosEncontrados);
 }
 
+/*Mueestra todos los vuelos que concuerden con la busqueda realizada */
 function pintarVuelos(vuelosEncontrados) {
     var divVuelos = document.createElement("div");
     divVuelos.setAttribute('id', 'vuelos');
@@ -128,6 +135,8 @@ function pintarVuelos(vuelosEncontrados) {
     });
 }
 
+/*Al pulsar en el boton comprar de una tarjeta de un vuelo dado se inicia el proceso de reserva del vuelo.
+Para ello se crea un objeto reserva que almacena todos los datos relevantes y se guarda en el localStorage */
 function comprar(id) {
     var numBilletes = parseInt(document.getElementById("pasajeros").value);
     var vuelos = JSON.parse(localStorage.getItem("vuelos"));
@@ -161,6 +170,7 @@ function puedeComprarVuelosUser(usuario, numBilletes, idVuelo) {
     return [numBilletesComprados + numBilletes <= 10, numBilletesComprados];
 }
 
+/*Funcion que establece la fecha minima a partir de la cual se puede buscar un vuelo.*/
 (function () {
     var hoy = new Date(Date.now());
     document.getElementById('fecha').setAttribute("min", `${hoy.getFullYear()}-${hoy.getMonth() + 1}-${hoy.getDate()}`);

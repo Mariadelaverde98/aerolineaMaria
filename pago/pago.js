@@ -1,3 +1,4 @@
+/*Actualiza el numero de billetes dispoibles en el vuelo en el que se esta haciendo la reserva*/
 function vendeBilletes(reserva) {
     var vuelo = new Vuelo();
     vuelo = vuelo.fromJsonToVuelo(reserva.vuelo);
@@ -7,6 +8,7 @@ function vendeBilletes(reserva) {
     localStorage.setItem('vuelos', JSON.stringify(vuelos)); 
 }
 
+/*Se guardan todos los datos del pago en el objeto reservaActual del local storage*/
 function confirmarPago() {
     var nombre = document.getElementById('cardholder').value;
     var numTarjeta = document.getElementById('cardnumber').value;
@@ -36,6 +38,7 @@ function confirmarPago() {
     }
 }
 
+/*Verfica que los datos del pago sen corectos*/
 function compruebaDatos(nombre, numTarjeta, fechaEx, cvv) {
     var correcto = true;
     var mensaje;
@@ -59,6 +62,7 @@ function compruebaDatos(nombre, numTarjeta, fechaEx, cvv) {
     return [correcto, mensaje];
 }
 
+/*Guarda la reserva en el historial de reservas del usuario y aumenta 100 davinity points*/
 function actualizaHistorialYpoints(reserva) {
     var sesion = JSON.parse(localStorage.getItem("sesion"));
     var usuarioSesion = sesion.usuario;
@@ -73,11 +77,13 @@ function actualizaHistorialYpoints(reserva) {
     localStorage.setItem("usuarios", JSON.stringify(usuarios));
 }
 
+/*Pinta el precio total de la compra*/
 (function pintaPrecioTotal() {
     var precioTotal = JSON.parse(localStorage.getItem('reservaActual')).precio;
     document.getElementById('precioTotal').appendChild(document.createTextNode('TOTAL: ' + precioTotal + '€'));
 })();
 
+/*En caso de que el usuario tenga un metodo de pago guardado, los campos se autorrellenan */
 (function rellenarPago() {
     var sesion = new Sesion();
     sesion = sesion.getSesion();

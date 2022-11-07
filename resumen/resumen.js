@@ -3,6 +3,8 @@
 pasajeros: [{nombre: "María Soledad", apellidos: "de la Verde Pérez", dni: "qwertyu"},…]
 vuelo: {id: 41, origen: "Madrid", destino: "Edimburgo", fecha: "2022-10-26", hora: "9:00",…}*/
 
+
+/*Script que muestra todos los datos de la reserva que se acaba de completar */
 (function escribeResumen() {
     var reserva = JSON.parse(localStorage.getItem('reservaActual'));
     resumenPasajeros(reserva.pasajeros);
