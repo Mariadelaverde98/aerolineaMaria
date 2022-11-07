@@ -339,7 +339,9 @@ function registrarse() {
             alert("Ya hay una cuenta asociada a este email o DNI");
         }
     } else {
+        //respConfir[1].modal('show');
         alert(respConfir[1]);
+        //muestraMensaje("hola");
     }
 }
 
@@ -351,7 +353,7 @@ function comprobar(nombre, apellidos, email, confirEmail, password, confirPasswo
         apellidos: new RegExp(/^[A-Z\u00C0-\u017F]?[a-z\u00C0-\u017F]+ \s?[A-Z\u00C0-\u017F]?[a-z\u00C0-\u017F]* \s?[A-Z\u00C0-\u017F]?[a-z\u00C0-\u017F]* \s?[A-Z\u00C0-\u017F]?[a-z\u00C0-\u017F]*$/),
         dni: new RegExp(/^[0-9]{8}[A-Z]$/i),
         telefono: new RegExp(/^[0-9]{9}$/),
-        email: new RegExp(/^[^@]+@[^@]+\.[a-zA-Z]{2,}$/),
+        email: new RegExp(/^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,3})$/),
         password: new RegExp(/^(?=\w*\d)(?=\w*[A-Z])(?=\w*[a-z])\S{8,16}$/)
     }
     var campos = Object.keys(re);

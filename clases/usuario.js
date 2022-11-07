@@ -26,9 +26,11 @@ class Usuario {
         var cambiada = false;
         if (contrasenia == this.contrasenia) {
             this.contrasenia = nuevaContrasenia;
+            cambiada = true;
         }
         return cambiada;
     }
+
     fromJsonToUsuario(json) {
         return Object.assign(this, json);
     }

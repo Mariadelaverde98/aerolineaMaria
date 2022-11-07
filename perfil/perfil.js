@@ -1,10 +1,12 @@
-
+/*Dependiendo de si entras al perfil desde el boton perfil o el boton
+checkin te abre la pagina en una seccion u otra*/
 if (localStorage.getItem("pos") == '0') {
     document.getElementById("defaultOpen").click();
 } else {
     document.getElementById("checkinOp").click();
 }
 
+/*Muestra los datos del usuario que tiene la sesion iniciada*/
 (function mostrarDatos() {
     var sesion = new Sesion();
     sesion = sesion.getSesion();
@@ -16,49 +18,46 @@ if (localStorage.getItem("pos") == '0') {
     deshabilitarEdicion();
 })();
 
-function guardarDatosEnLocalStorage(usuarios, usuario, sesion, tipoDato) {
-    //actualiza el usuario de la sesion
-    sesion.usuario = usuario;
-    sesion.guardarSesion();
-    //actualizar el array de usuarios --> puedo buscar el usuario y luego modificarlo con las funciones que ya tengo pensadas arriba
-    console.log(usuarios.buscarUsuario(usuario));
-    tipoDato == "personales" ? usuarios.modificarDatosPersonales(usuario, usuarios.buscarUsuario(usuario)) : usuarios.modificarPassword(usuario, usuarios.buscarUsuario(usuario));
-
-    usuarios.guardarUsuarios();
-}
-
+/*Guarda los datos personales que se hayan editado*/
 function guardarDatos() {
-    var sesion = sesionFromLocalStorage();
-    //CAMBIAR LA CLASE PARA QUE COJA EL SELECT TB!!!!!
+    var sesion = new Sesion();
+    sesion = sesion.getSesion();
     var datos = document.querySelectorAll(".info-personal-input");
-    var usuario = usuarioFromSesion(sesion);
-    var usuarios = usuariosFromLocalStorage();
+    var usuario = sesion.usuario;
+    var usuarios = new Usuarios();
+    usuarios = usuarios.usuariosFromLocalStorage();
+    var campos = ["nombre", "apellidos", "dni", "fechaNacimiento", "email", "telefono"];
+    var i = 0;
     datos.forEach(input => {
-        if (input.value != "" && input.value != usuario.devolverAtributo(input.id)) {
-            //guardar los cambios del usuarios atributo por atributo
-            usuario.guardarAtributo(input.id, input.value);
+        if (input.value != "" && input.value != usuario[campos[i]]) {
+            usuario[campos[i]] = input.value;
         }
+        i++;
     });
-
-    guardarDatosEnLocalStorage(usuarios, usuario, sesion, "personales");
+    sesion.guardarSesion();
+    usuarios.datos[usuario.email] = usuario;
+    usuarios.guardarEnLocalStorage();
+    deshabilitarEdicion();
 }
 
-function guardarContraseña() {
-    var sesion = sesionFromLocalStorage();
-    var usuario = usuarioFromSesion(sesion);
-    var usuarios = usuariosFromLocalStorage();
-    var contraseñaNueva = document.querySelector("#nuevaPassword.pass-input").value;
-    var contraseñaActual = document.querySelector("#password.pass-input").value;
-    if (usuario.comprobarPassword(contraseñaActual)) {
-        if (usuario.comprobarPassword(contraseñaNueva)) {
-            var mensaje = "La contraseña nueva no puede ser igual a la anterior";
-            mostrarMensaje(mensaje);
-        } else {
-            usuario.pass = contraseñaNueva;
-            guardarDatosEnLocalStorage(usuarios, usuario, sesion, "password");
-        }
+/*Cambia la contraseña*/
+function guardarContrasenia() {
+    var sesion = new Sesion();
+    sesion = sesion.getSesion();
+    var usuario = new Usuario();
+    usuario.fromJsonToUsuario(sesion.usuario);
+    var usuarios = new Usuarios();
+    usuarios = usuarios.usuariosFromLocalStorage();
+    var contraseniaNueva = document.querySelector("#nuevaPassword.pass-input").value;
+    var contraseniaActual = document.querySelector("#password.pass-input").value;
+    var cambiada = usuario.cambiaContrasenia(contraseniaActual, contraseniaNueva)
+    if (cambiada) {
+        sesion.usuario = usuario;
+        sesion.guardarSesion();
+        usuarios.datos[usuario.email] = usuario;
+        usuarios.guardarEnLocalStorage();
     } else {
-        mostrarMensaje("La contraseña actual no coincide");
+        alert("La contraseña actual no coincide");
     }
 }
 
@@ -128,6 +127,7 @@ function openContent(evt, id) {
     evt.currentTarget.className += " active";
 }
 
+/*Muestra los vuelos que estan pendientes de checkin*/
 (function muestraVuelosCheckin() {
     var div = document.getElementById("checkin");
     var sesion = new Sesion();
@@ -139,24 +139,39 @@ function openContent(evt, id) {
     var diaVuelo;
     var mesVuelo;
     var anioVuelo;
+    var horas;
+    var mins;
     reservas = reservas.filter(reserva => {
         fechaVuelo = reserva.vuelo.fecha;
         anioVuelo = parseInt(fechaVuelo.substring(0, 4));
-        mesVuelo = parseInt(fechaVuelo.substring(5, 7));
+        mesVuelo = Math.abs(parseInt(fechaVuelo.substring(5, 7)));
         diaVuelo = Math.abs(parseInt(fechaVuelo.substring(fechaVuelo.length - 2)));
-        fechaVuelo = new Date(anioVuelo, mesVuelo - 1, diaVuelo);
+        horas = parseInt(reserva.vuelo.hora.substring(0,2));
+        mins = parseInt(reserva.vuelo.hora.substring(3));
+        fechaVuelo = new Date(anioVuelo, mesVuelo - 1, diaVuelo, horas, mins, 0);
         return calcularDiferenciaHoras(hoy, fechaVuelo) < 48 && !reserva.checkin;
     });
-    pintaReservas(reservas, div);
+    pintaReservas(reservas, div, true);
 })();
 
-function pintaReservas(reservas, div) {
+/*muestra todas las reservas hechas por el usuario*/
+(function muestraHistorialReservas() {
+    var div = document.getElementById("historial");
+    var sesion = new Sesion();
+    sesion = sesion.getSesion();
+    var usuario = sesion.usuario;
+    pintaReservas(usuario.historialReservas, div, false);
+})()
+
+/*pinta las tarjetas de las reservas*/
+function pintaReservas(reservas, div, checkin) {
     reservas.forEach(reserva => {
         var divR = document.createElement("div");
         div.appendChild(divR);
         divR.setAttribute("class", "vuelosCheckin");
         var vuelo = reserva.vuelo;
         var divDatos = document.createElement("div");
+        divDatos.style.display = "contents";
         var p = document.createElement("p");
         divDatos.appendChild(p);
         p.appendChild(document.createTextNode(`Madrid → ${vuelo.destino} | ${vuelo.hora} -  ${vuelo.horallegada}`));
@@ -165,22 +180,33 @@ function pintaReservas(reservas, div) {
         p2.appendChild(document.createTextNode(`${vuelo.fecha}`));
         divR.appendChild(divDatos);
         p.style.fontFamily = 'system-ui';
-        p.style.fontWeight = '500';
+        p.style.fontWeight = '400';
         p.style.color = '#2E2E5C';
         p2.style.fontFamily = 'system-ui';
-        p2.style.fontWeight = '500';
+        p2.style.fontWeight = '400';
         p2.style.color = '#2E2E5C';
+        if (reserva.checkin) {
+            var p3 = document.createElement("p");
+            p3.innerHTML = "Asientos: " + reserva.asientos;
+            divDatos.appendChild(p3);
+        }
 
-        var botonCheckin = document.createElement("button");
-        divR.appendChild(botonCheckin);
-        botonCheckin.innerHTML = "Check-in";
-        botonCheckin.style.paddingTop = "3%";
-        botonCheckin.style.paddingBottom = "3%";
-        botonCheckin.style.borderRadius = "5px";
-        //botonCheckin.setAttribute("onclick", `comprar(${vuelo.id})`);
+        if (checkin) {
+            var botonCheckin = document.createElement("button");
+            divR.appendChild(botonCheckin);
+            botonCheckin.innerHTML = "Check-in";
+            botonCheckin.style.paddingTop = "3%";
+            botonCheckin.style.paddingBottom = "3%";
+            botonCheckin.style.borderRadius = "5px";
+            botonCheckin.onclick = () => {
+                localStorage.setItem("checkinActual", JSON.stringify(reserva));
+                window.location = "../checkin/checkin.html";
+            }
+        }
     })
 }
 
+/*calcula la diferencia en horas entre dos fechas dadas*/
 function calcularDiferenciaHoras(fecha1, fecha2) {
     let diferencia = (fecha2.getTime() - fecha1.getTime()) / 1000;
     diferencia /= (60 * 60);
@@ -194,6 +220,7 @@ function calcularDiferenciaHoras(fecha1, fecha2) {
 
 /*----------METODO DE PAGO---------*/
 
+/*Si existe un metodo de pago lo muestra y si no existe te da la opcion de añadir uno */
 function metodoPago() {
     var sesion = new Sesion();
     sesion = sesion.getSesion();
@@ -219,6 +246,7 @@ function metodoPago() {
 };
 metodoPago();
 
+/*Se guarda el metodo de pago en el usuario*/
 function guardarPago() {
     var sesion = new Sesion();
     sesion = sesion.getSesion();
@@ -237,11 +265,12 @@ function guardarPago() {
     metodoPago();
 }
 
+/*Pinta la tarjeta con los datos del metodo de pago*/
 function muestraMetodoPago(usuario) {
     var div = document.createElement("div");
     div.setAttribute("id", "metodoPago")
     document.querySelector("div#pago").appendChild(div);
-    var tarjeta =  usuario.metodoPago.numeroTarjeta;
+    var tarjeta = usuario.metodoPago.numeroTarjeta;
     tarjeta = "************" + tarjeta.substring(tarjeta.length - 4);
     var divTitular = document.createElement("div");
     divTitular.appendChild(document.createTextNode("Nombre del titular: " + usuario.metodoPago.titular));
@@ -249,4 +278,30 @@ function muestraMetodoPago(usuario) {
     var divNum = document.createElement("div");
     div.appendChild(document.createTextNode("Número de tarjeta: " + tarjeta));
     div.appendChild(divNum);
+    var divButton = document.createElement("div");
+    divButton.setAttribute("id", "boton_eliminar_pago_contenedor");
+    document.querySelector("div#pago").appendChild(divButton);
+    var boton = document.createElement("button");
+    boton.setAttribute("id", "boton_eliminar_pago");
+    boton.innerText = "Borrar método de pago";
+    divButton.appendChild(boton);
+    boton.setAttribute("onclick", `borrarMetodoPago()`)
+}
+
+/*Borra el metodo de pago existente*/
+function borrarMetodoPago() {
+    var sesion = new Sesion();
+    sesion = sesion.getSesion();
+    sesion.usuario.metodoPago = undefined;
+    sesion.guardarSesion();
+    
+    var usuarios = new Usuarios();
+    usuarios = usuarios.usuariosFromLocalStorage();
+    usuarios.datos[sesion.usuario.email] = sesion.usuario;
+    usuarios.guardarEnLocalStorage();
+    var div = document.querySelector("div#metodoPago");
+    div.parentNode.removeChild(div);
+    var boton = document.querySelector("button#boton_eliminar_pago");
+    boton.parentNode.removeChild(boton);
+    metodoPago();
 }

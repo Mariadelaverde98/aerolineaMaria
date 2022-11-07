@@ -151,7 +151,7 @@ div.vuelosCheckin {
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: space-around;
+  justify-content: space-between;
   border: 0.5px solid;
   border-radius: 5px;
   padding: 3%;
@@ -199,4 +199,15 @@ div#idicion_perfil_container button, div#boton_cambia_pass button {
 
 .tab button:hover {
   background-color: rgb(255, 255, 255);
+}
+
+div#boton_eliminar_pago_contenedor {
+  display: flex;
+  padding: 2%;
+}
+
+button#boton_eliminar_pago {
+  border-radius: 5px;
+  padding-top: 1%;
+  padding-bottom: 1%;
 }

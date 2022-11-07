@@ -7,10 +7,10 @@ function generaId() {
     return idActual;
 }
 
-//Generamos 30 fechas disponibles.
-function genera30fechas() {
+//Generamos 100 fechas disponibles.
+function genera100fechas() {
     var hoy = new Date(Date.now());
-    var fin = hoy * 1 + 30 * 24 * 3600 * 1000;
+    var fin = hoy * 1 + 100 * 24 * 3600 * 1000;
     var unDia = 24 * 3600 * 1000;
     var fecha;
     var fechas = [];
@@ -39,8 +39,8 @@ function generaVuelosMexico(fecha) {
     arrayVuelo.push(new Vuelo(generaId(), 'Madrid', 'Ciudad de Mexico', fecha, '13:00', '6:20', 30, 350));
 }
 
-function generaVuelos30dias() {
-    var fechas = genera30fechas();
+function generaVuelos100dias() {
+    var fechas = genera100fechas();
     for (let i = 0; i < fechas.length; i++) {
         generaVuelosParis(fechas[i]);
         generaVuelosMexico(fechas[i]);
@@ -53,10 +53,11 @@ function generaVuelos30dias() {
     var vuelosEnMemoria = localStorage.getItem("vuelos");
     var usuarios = localStorage.getItem("usuarios");
     var sesion = localStorage.getItem("sesion");
+    var numReservas = localStorage.getItem("numReservas");
     if (vuelosEnMemoria) {
         arrayVuelo = JSON.parse(vuelosEnMemoria);
     } else {
-        generaVuelos30dias();
+        generaVuelos100dias();
         localStorage.setItem("vuelos", JSON.stringify(arrayVuelo));
     }
     if (!usuarios) {
@@ -67,6 +68,9 @@ function generaVuelos30dias() {
         sesion = new Sesion();
         sesion.cerrarSesion();
         sesion.guardarSesion();
+    }
+    if (!numReservas) {
+        localStorage.setItem("numReservas", JSON.stringify(0));
     }
 })();
 
